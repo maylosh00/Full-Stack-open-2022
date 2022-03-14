@@ -1,0 +1,9 @@
+note over browser: Form gets submitted
+
+note over browser:
+browser executes the event handler
+for form.onsubmit that pushes note
+to the list and rerenders
+displayed notes
+end note
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa \n content-type: application-json \n {content: "note content", date: "2022-03-14"}
