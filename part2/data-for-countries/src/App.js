@@ -20,17 +20,43 @@ const CountryEntry = ({country}) => {
   )
 }
 
+const WeatherData = ({data}) => {
+  return (
+    <>
+      <img src={`http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`} />
+      <p>Temperature {data.main.temp} Celcius</p>
+      <p>Wind: {data.wind.speed} m/s </p>
+    </>
+  )
+}
+
 const CountryData = ({country}) => {
+  const [weather, setWeather] = useState('')
+  const api_key = process.env.REACT_APP_API_KEY
+
+  useEffect(() => {
+    axios
+    .get(`https://api.openweathermap.org/data/2.5/weather?lat=${country.capitalInfo.latlng[0]}&lon=${country.capitalInfo.latlng[1]}&units=metric&appid=${api_key}`)
+    .then(promise => {
+      setWeather(promise.data)
+    })
+    }, [])
+
   return (
     <div>
     <h1>{country.name.common}</h1>
+
     <p>Capital: {country.capital}</p>
     <p>Area: {country.area}</p>
-    <h2>languages:</h2>
+    <h3>languages:</h3>
     <ul>
       {Object.entries(country.languages).map(([key, val]) => <li key={key}>{val}</li>)}
     </ul>
     <img src={country.flags.png} alt={country.name.common + ' flag'} />
+
+    <h2>Weather in {country.name.common}</h2>
+    {weather === '' ? 'Fetching data from server, please wait...' : <WeatherData data={weather}/>}
+
   </div>
   )
 }
@@ -71,12 +97,12 @@ const App = () => {
     })
     }, [])
 
+
   return (
     <div>
-      Find countries
+      <h1>Find countries</h1>
       <input placeholder='write country here' onChange={handleFilterChange}/>
       <Countries countries={countries} filter={filter}/>
-      
     </div>
   )
 }
