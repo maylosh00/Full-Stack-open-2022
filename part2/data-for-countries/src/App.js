@@ -100,7 +100,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Find countries</h1>
+      Find countries
       <input placeholder='write country here' onChange={handleFilterChange}/>
       <Countries countries={countries} filter={filter}/>
     </div>
