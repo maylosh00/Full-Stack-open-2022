@@ -1,6 +1,40 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+const CountryEntry = ({country}) => {
+
+  const [showInfo, setShowInfo] = useState(false)
+
+  const handleClick = (event) => {
+    event.preventDefault()
+    setShowInfo(!showInfo)
+  }
+
+  return (
+    <li >{country.name.common} 
+      <button onClick={handleClick}>
+        {showInfo ? 'hide' : 'show'}
+      </button>
+      {showInfo ? <CountryData country={country}/> : ''}
+    </li>
+  )
+}
+
+const CountryData = ({country}) => {
+  return (
+    <div>
+    <h1>{country.name.common}</h1>
+    <p>Capital: {country.capital}</p>
+    <p>Area: {country.area}</p>
+    <h2>languages:</h2>
+    <ul>
+      {Object.entries(country.languages).map(([key, val]) => <li key={key}>{val}</li>)}
+    </ul>
+    <img src={country.flags.png} alt={country.name.common + ' flag'} />
+  </div>
+  )
+}
+
 const Countries = ({countries, filter}) => {
 
   const filtered = countries.
@@ -10,21 +44,12 @@ const Countries = ({countries, filter}) => {
     return (<p>Too many matches, specify another filter</p>)
   else if (filtered.length === 1) 
     return (
-      <div>
-        <h1>{filtered[0].name.common}</h1>
-        <p>Capital: {filtered[0].capital}</p>
-        <p>Area: {filtered[0].area}</p>
-        <h2>languages:</h2>
-        <ul>
-          {Object.entries(filtered[0].languages).map(([key, val]) => <li key={key}>{val}</li>)}
-        </ul>
-        <img src={filtered[0].flags.png} alt={filtered[0].name.common + ' flag'} />
-      </div>
+      <CountryData country={filtered[0]} />
     )
   else
     return (
       <ul>
-        {filtered.map(country => <li key={country.name.common}>{country.name.common}</li>)}
+        {filtered.map(country => <CountryEntry key={country.name.common} country={country}/>)}
       </ul>
     )
 }
