@@ -1,7 +1,17 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+morgan.token('req-body', (req, res) => {
+    if (req.method === 'POST')
+        return JSON.stringify(req.body)
+    else
+        return ''
+})
+app.use(morgan(
+    ':method :url :status :res[content-length] - :response-time ms :req-body'
+    ))
 
 let persons = [
     { 
@@ -67,15 +77,18 @@ app.post('/api/persons', (req, res) => {
     else if (persons.some(person => person.name === body.name)) {
         res.status(400).json({error: 'name must be unique'})
     }
-
-    const person = {
-        id: Math.floor(Math.random() * 100000),
-        name: body.name,
-        number: body.number
+    else {
+        const person = {
+            id: Math.floor(Math.random() * 100000),
+            name: body.name,
+            number: body.number
+        }
+    
+        persons = persons.concat(person)
+        res.json(person)
     }
 
-    persons = persons.concat(person)
-    res.json(person)
+
 })
 
 const PORT = 3001
