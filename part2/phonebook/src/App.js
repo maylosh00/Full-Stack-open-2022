@@ -19,7 +19,6 @@ const Notification = ({ message, messageColor }) => {
   }
   return (
     <div style={notifStyle}>
-      {console.log(notifStyle)}
       {message}
     </div>
   )
