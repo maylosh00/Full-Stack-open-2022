@@ -70,8 +70,11 @@ const App = () => {
             setPersons(persons.map(person => person.id === personId ? returnedObject : person))
             setNewName('')
             setNewNumber('')
+            showGreenMessage(`Changed ${newName}'s number to ${newNumber}`)
           })
-        showGreenMessage(`Changed ${newName}'s number to ${newNumber}`)
+          .catch(error => {
+            showRedMessage(`${error.response.data.error}`)
+          })
       }
     }
     else if (persons.some(person => person.number === newNumber))
@@ -88,8 +91,12 @@ const App = () => {
           setPersons(persons.concat(returnedObject))
           setNewName('')
           setNewNumber('')
+          showGreenMessage(`Added ${newName}'s number (${newNumber}) to the phonebook`)
         })
-      showGreenMessage(`Added ${newName}'s number (${newNumber}) to the phonebook`)
+        .catch(error => {
+          showRedMessage(`${error.response.data.error}`)
+        })
+
     }
   }
 
@@ -105,8 +112,6 @@ const App = () => {
   }
 
   const deletePerson = (id) => {
-
-    
     return () => {
       if (window.confirm(`Are you sure want to delete ${persons.find(person => person.id === id).name}`)) {
         personServices
