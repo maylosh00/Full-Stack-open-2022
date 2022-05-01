@@ -6,16 +6,17 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
+const middleware = require('./utils/middleware')
 
 logger.info('connecting to', config.MONGODB_URI)
 
-const mongoUrl = 'mongodb://localhost/bloglist'
-mongoose.connect(mongoUrl)
+mongoose.connect(config.TEST_MONGODB_URI)
 
 app.use(cors())
 app.use(express.json())
 
 app.use('/api/blogs', blogsRouter)
 
+app.use(middleware.errorHandler)
 
 module.exports = app
