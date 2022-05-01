@@ -86,6 +86,36 @@ describe('BlogAPI', () => {
       .post('/api/blogs')
       .send(noAuthorBlogObject)
       .expect(400)
+  })
+
+  test('deleting blogs works correctly', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blog = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blog.id}`)
+      .expect(204)
+    
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
+
+    const titles = blogsAtEnd.map(blog => blog.title)
+    expect(titles).not.toContain(blog.title)
+  })
+
+  test('updating blogs works correctly', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogAtStart = blogsAtStart[0]
+    const changedBlog = { ...blogAtStart, likes: blogAtStart.likes + 1 }
+
+    await api
+      .put(`/api/blogs/${blogAtStart.id}`)
+      .send(changedBlog)
+      .expect(200)
+    
+    const blogsAtEnd = await helper.blogsInDb()
+    const blogAtEnd = blogsAtEnd[0]
+    expect(blogAtEnd.likes).toEqual(blogAtStart.likes + 1)
 
   })
 })
