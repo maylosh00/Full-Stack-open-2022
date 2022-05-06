@@ -1,69 +1,55 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
-
-const initialBlogs = [
-  {
-    _id: "5a422a851b54a676234d17f7",
-    title: "React patterns",
-    author: "Michael Chan",
-    url: "https://reactpatterns.com/",
-    likes: 7,
-    __v: 0
-  },
-  {
-    _id: "5a422aa71b54a676234d17f8",
-    title: "Go To Statement Considered Harmful",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-    likes: 5,
-    __v: 0
-  },
-  {
-    _id: "5a422b3a1b54a676234d17f9",
-    title: "Canonical string reduction",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-    likes: 12,
-    __v: 0
-  },
-  {
-    _id: "5a422b891b54a676234d17fa",
-    title: "First class tests",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-    likes: 10,
-    __v: 0
-  },
-  {
-    _id: "5a422ba71b54a676234d17fb",
-    title: "TDD harms architecture",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-    likes: 0,
-    __v: 0
-  },
-  {
-    _id: "5a422bc61b54a676234d17fc",
-    title: "Type wars",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-    likes: 2,
-    __v: 0
-  }  
-]
+const jwt = require('jsonwebtoken')
 
 const initialUsers = [
   {
-    "username": "maylosh",
-    "name": "Miłoszek Staniszewski",
-    "password": "super-secret-password"
+  username: "maylosh",
+  password: "password",
+  _id: "62751e9dff88b7e4cbdfd437"
   },
   {
-    "username": "maylosh2",
-    "name": "Miłosz Staniszewski",
-    "password": "super-secret-password2"
+  username: "john-snow",
+  password: "password",
+  _id: "62751ec6ff88b7e4cbdfd43b"
+  },
+  {
+  username: "jan",
+  password: "password",
+  _id: "62751eceff88b7e4cbdfd43e"
   }
 ]
+
+const initialBlogs = [
+  {
+  title: "super blog 300",
+  author: "Miłoszek",
+  url: "miloszek.com",
+  likes: 0,
+  user: "62751e9dff88b7e4cbdfd437",
+  },
+  {
+  title: "super blog 400",
+  author: "Miłoszek",
+  url: "miloszek.com",
+  likes: 0,
+  user: "62751e9dff88b7e4cbdfd437",
+  },
+  {
+  title: "some GoT stuff",
+  author: "John Snow",
+  url: "johnsnow.com",
+  likes: 0,
+  user: "62751ec6ff88b7e4cbdfd43b",
+  }
+]
+
+
+
+const getTokenForUser = async username => {
+  const user = await User.findOne({ username })
+  return jwt.sign({username: user.username, id: user._id}, process.env.SECRET)
+}
 
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
@@ -75,4 +61,10 @@ const usersInDb = async () => {
   return users.map(user => user.toJSON())
 }
 
-module.exports = { initialBlogs, initialUsers, blogsInDb, usersInDb }
+module.exports = { 
+  initialBlogs, 
+  initialUsers, 
+  blogsInDb, 
+  usersInDb, 
+  getTokenForUser 
+}
