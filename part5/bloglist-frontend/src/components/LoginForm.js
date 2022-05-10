@@ -1,11 +1,11 @@
-const LoginForm = ({loginHandler, username, password, usernameHandler, passwordHandler}) => {
+const LoginForm = ({ loginHandler, username, password, usernameHandler, passwordHandler }) => {
   return (
     <>
       <h2>log in to the blog app:</h2>
       <form onSubmit={loginHandler}>
         <div>
           username
-          <input 
+          <input
             type='text'
             value={username}
             name='Username'
@@ -14,7 +14,7 @@ const LoginForm = ({loginHandler, username, password, usernameHandler, passwordH
         </div>
         <div>
           password
-          <input 
+          <input
             type='password'
             value={password}
             name='Password'

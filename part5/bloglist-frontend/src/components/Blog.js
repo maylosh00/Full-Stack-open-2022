@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 
-const Blog = ({blog, updateBlog, removeBlog}) => {
+const Blog = ({ blog, updateBlog, removeBlog }) => {
   const [buttonLabel, setButtonLabel] = useState('hide')
   const [showInfo, setShowInfo] = useState(false)
 
@@ -23,7 +24,7 @@ const Blog = ({blog, updateBlog, removeBlog}) => {
     event.preventDefault()
     console.log(blog)
     setShowInfo(!showInfo)
-  }  
+  }
 
   const updateLikesHandler = (event) => {
     event.preventDefault()
@@ -44,25 +45,32 @@ const Blog = ({blog, updateBlog, removeBlog}) => {
   }
 
   const loggedUserName = JSON.parse(window.localStorage.getItem('loggedUser')).username
-  
+
   return (
     <div style={blogStyle}>
       {blog.title} <button onClick={handleClick}>{buttonLabel}</button>
       {showInfo
-      ? 
+        ?
         <>
           {<p>{blog.url}</p>}
           {<p>likes: {blog.likes}<button onClick={updateLikesHandler}>like</button></p>}
           {<p>{blog.author}</p>}
           {blog.user.username === loggedUserName
-          ? <button onClick={removeBlogHandler}>remove</button>
-          : null}
+            ? <button onClick={removeBlogHandler}>remove</button>
+            : null}
         </>
-      :
+        :
         null}
 
-    </div>  
+    </div>
   )
 }
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  updateBlog: PropTypes.func.isRequired,
+  removeBlog: PropTypes.func.isRequired
+}
+
 
 export default Blog

@@ -1,13 +1,13 @@
 import { useState } from 'react'
 
-const BlogCreator = ({createBlog}) => {
+const BlogCreator = ({ createBlog }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
   const blogAddHandler = (event) => {
     event.preventDefault()
-    createBlog({title, author, url})
+    createBlog({ title, author, url })
     setTitle('')
     setAuthor('')
     setUrl('')
@@ -18,29 +18,29 @@ const BlogCreator = ({createBlog}) => {
       <h2>create new</h2>
       <div>
         title:
-        <input 
+        <input
           type='text'
           value={title}
           name='Title'
-          onChange={({target}) => setTitle(target.value)}
+          onChange={({ target }) => setTitle(target.value)}
         />
       </div>
       <div>
         author:
-        <input 
+        <input
           type='text'
           value={author}
           name='Author'
-          onChange={({target}) => setAuthor(target.value)}
+          onChange={({ target }) => setAuthor(target.value)}
         />
       </div>
       <div>
         url:
-        <input 
+        <input
           type='text'
           value={url}
           name='Url'
-          onChange={({target}) => setUrl(target.value)}
+          onChange={({ target }) => setUrl(target.value)}
         />
       </div>
       <button type="submit">add blog</button>

@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import uuid from 'react-uuid'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -19,7 +20,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const App = () => {
       blogService.setToken(loggedUser.token)
     }
   }, [])
-  
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -82,7 +83,7 @@ const App = () => {
       // updating blogs like this due to a bug with "user" field
       blogService.getAll().then(blogs =>
         setBlogs( blogs )
-      )  
+      )
       blogFormRef.current.toggleVisibility()
       setSuccessMessage(successMessage.concat(`Succesfully added blog "${addedBlog.title}" by ${addedBlog.author}.`))
     }
@@ -97,7 +98,7 @@ const App = () => {
       // updating blogs like this due to a bug with "user" field
       blogService.getAll().then(blogs =>
         setBlogs( blogs )
-      )  
+      )
       setSuccessMessage(successMessage.concat(`Succesfully updated blog "${blogObject.title}".`))
     }
   }
@@ -112,33 +113,33 @@ const App = () => {
       // updating blogs like this due to a bug with "user" field
       blogService.getAll().then(blogs =>
         setBlogs( blogs )
-      )  
+      )
     }
   }
 
   return (
     <div>
-      {errorMessage !== [] && errorMessage.map(message => <p style={{color: 'red'}}>{message}</p>)}
-      {successMessage !== [] && successMessage.map(message => <p style={{color: 'green'}}>{message}</p>)}
+      {errorMessage !== [] && errorMessage.map(message => <p key={uuid()} style={{ color: 'red' }}>{message}</p>)}
+      {successMessage !== [] && successMessage.map(message => <p key={uuid()} style={{ color: 'green' }}>{message}</p>)}
       {
         user === null
-        ?
-          <LoginForm 
+          ?
+          <LoginForm
             loginHandler={handleLogin}
             username={username}
             password={password}
-            usernameHandler={({target}) => setUsername(target.value)}
-            passwordHandler={({target}) => setPassword(target.value)}
+            usernameHandler={({ target }) => setUsername(target.value)}
+            passwordHandler={({ target }) => setPassword(target.value)}
           />
-        :
+          :
           <>
-            <BlogList 
+            <BlogList
               blogs={blogs}
               updateBlog={updateBlog}
               removeBlog={removeBlog}
             />
             <Togglable buttonLabel="new blog" ref={blogFormRef}>
-              <BlogCreator 
+              <BlogCreator
                 createBlog={createBlog}
               />
             </Togglable>
